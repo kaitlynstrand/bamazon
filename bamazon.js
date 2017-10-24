@@ -30,7 +30,7 @@ function printProducts() {
     }
     console.log(productsTable.toString());
     userOrder(res)
-})
+  })
 }
 
 function userOrder() {
@@ -39,29 +39,70 @@ function userOrder() {
   {
     name: "item",
     type: "input",
-    message: "What is the item ID of the game you would like to buy?"
+    message: "What is the item ID of the game you would like to buy?",
+    validate: function(value) {
+      if (isNaN(value) === false && parseInt(value) > 0 && parseInt(value) <= 11) {
+        return true;
+        console.log("That's a great game!");
+      } else {
+        return false;
+        console.log("Oops! We don't have that game");
+      }
+    }
+  }, {
+    name: "quantity",
+    type: "input",
+    message: "How many of that game would you like?"
   }
-    ])
-    .then(function(answer) {
-      var chosenGame;
-      for (var i=0; i< res.length; i++) {
-        if (res[i].itemID === answer.item) {
-          chosenGame === res[i];
+  ])  
+  .then(function(answer) {
+    console.log("i'm here", answer)
+    connection.query("SELECT * from products", function(err, res) {
+      console.log("chello")
+      if (err) throw err;
+      for (var i = 0; i < res.length; i++) {
+        //console.log(answer.item, res[i].itemID, res[i].stockQuantity, typeof(res[i].itemID), typeof(answer.item))
+        if (res[i].itemID === parseInt(answer.item)) {
+          if (res[i].stockQuantity <= parseInt(answer.quantity)) {
+            console.log("Insufficient Quantity");
+              } else {              
+                var newStockQuantity = res[i].stockQuantity - answer.quantity;
+                var totalPrice = res[i].price * answer.quantity;
+                console.log(newStockQuantity, totalPrice)
+                console.log("The total damage: $" + totalPrice)
+
+
+
+
+            //decrement answer.quantity from res[i].stockQuantity
+            //tell user cost of order
+            //res[i].price * answer.quantity = totalPrice
+          }
+          
         }
       }
+
+    })
   })
-  }//      
-
-//     })
-//   {
-//     name: "amount",
-//     type: "text",
-//     message: "How many units of " + item.input + " would you like to buy?",
+}
+//     var chosenGame;
+//     for (var i=0; i< res.length; i++) {
+//       if (res[i].itemID === answer.item) {
+//         chosenGame === res[i];
+//       }
 //     }
-//     ])
+//   })
+//   }//      
 
-    
-  
+// //     })
+// //   {
+// //     name: "amount",
+// //     type: "text",
+// //     message: "How many units of " + item.input + " would you like to buy?",
+// //     }
+// //     ])
 
 
-  
+
+
+
