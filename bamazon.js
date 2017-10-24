@@ -56,9 +56,9 @@ function userOrder() {
   }
   ])  
   .then(function(answer) {
-    console.log("i'm here", answer)
+    //console.log("i'm here", answer)
     connection.query("SELECT * from products", function(err, res) {
-      console.log("chello")
+      //console.log("chello")
       if (err) throw err;
       for (var i = 0; i < res.length; i++) {
         //console.log(answer.item, res[i].itemID, res[i].stockQuantity, typeof(res[i].itemID), typeof(answer.item))
@@ -68,7 +68,8 @@ function userOrder() {
               } else {              
                 var newStockQuantity = res[i].stockQuantity - answer.quantity;
                 var totalPrice = res[i].price * answer.quantity;
-                console.log(newStockQuantity, totalPrice)
+                //console.log(newStockQuantity, totalPrice)
+                console.log("Our new Stock Quantity is " + newStockQuantity)
                 console.log("The total damage: $" + totalPrice)
 
 
